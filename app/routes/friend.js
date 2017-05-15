@@ -31,5 +31,31 @@ router.get("/searchFriend", function(req, res){
 		}
 	});
 });
+router.get("/getFriends", function(req, res){
+	mongoose.model("user").findOne({name: req.session.name}, function(err, data){
+		if(err){
+			console.log(err);
+		}
+		else{
+			if(!data.friends.length){
+				res.json([]);
+			}
+			else{
+				var resultData = [];
+				mongoose.model("user").find({name: {"$in": data.friends}}, function(err, data){
+					data.forEach(function(item){
+						var temp = {};
+						temp.name = item.name;
+						temp.nickName = item.nickName;
+						temp.avatar = item.avatar;
+						temp.status = item.status;
+						resultData.push(temp);
+					});
+					res.json(resultData);
+				});
+			}
+		}
+	});
+});
 
 module.exports = router;

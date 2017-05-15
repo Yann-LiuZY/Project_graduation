@@ -280,6 +280,21 @@ body{
 
 	color: #fff;
 }
+.menu-item-status{
+	font-size: 14px;
+	line-height: 30px;
+
+	float: right;
+
+	color: #fff;
+}
+.menu-item-none{
+	line-height: 60px;
+
+	text-align: center;
+
+	color: #fafafa;
+}
 .new-message{
 	position: absolute;
 	top: 6px;
