@@ -54,11 +54,11 @@ $(function(){
             $formTip.text("账号已存在");
             return;
         }
-        // if(!$("#register-nickname").data("result") && !!$("#register-nickname").val()){
-        //     event.preventDefault();
-        //     $formTip.text("昵称已存在");
-        //     return;
-        // }
+        if(!$("#register-nickname").data("result") && !!$("#register-nickname").val()){
+            event.preventDefault();
+            $formTip.text("昵称已存在");
+            return;
+        }
         if(!!password && !!passwordAgain){
             if(password != passwordAgain){
                 $formTip.text("两次密码输入不一致");

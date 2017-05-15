@@ -3,7 +3,7 @@
  */
 
 $(function(){
-	// 模态框点击背景关闭
+	// 点击背景关闭模态框
 	$(".modal-background").click(function(event) {
 		$(this).parent().hide();
 	});
@@ -19,6 +19,12 @@ $(function(){
 		$(this).addClass("menu-nav-item-check");
 		$("#menu-message").hide();
 		$("#menu-friend").show();
+	});
+	// 关闭下拉栏
+	$("body").click(function(){
+		var $dropdownMenuBody = $("#dropdown-menu-body");
+		if($dropdownMenuBody.is(":visible"))
+			$dropdownMenuBody.hide();
 	});
 });
 
@@ -74,6 +80,27 @@ $(function(){
 			reader.readAsDataURL(file);
 		}
 	});
+	// 检查昵称是否已存在
+	$(".info-change-submit").blur(function(){
+		var $this = $("#info-change-nickname");
+        $.ajax({
+            method: "GET",
+            url: "/user/checkNickName",
+            data: {nickName: $this.val()},
+            dataType: "json",
+            success: function(data){
+                if(data.result == "success"){
+                    $this.data("result", true);
+                }else{
+                    $this.data("result", false);
+                }
+            },
+            error: function(err){
+            	console.log(err);
+                alert("网络异常，检查昵称失败");
+            }
+        });
+	});
 	// 修改个人信息
 	$("#info-change-form").submit(function(event){
 		event.preventDefault();
@@ -83,6 +110,11 @@ $(function(){
 		}
 		if(!$("#info-change-password").val()){
 			alert("请输入密码");
+			return false;
+		}
+		if(!$("#info-change-nickname").data("result")){
+			alert("昵称已存在");
+			$("#info-change-nickname").val($("#user-name").text());
 			return false;
 		}
 		var formData = new FormData(this);
@@ -105,13 +137,12 @@ $(function(){
 		});
 	});
 
-	// 隐藏菜单栏#dropdown-menu
-	var $dropDownMenuBody = $("#dropdown-menu-body");
-	$("#dropdown-menu").click(function(){
-		$dropDownMenuBody.toggle();
+	// 隐藏菜单栏#dropdown-menu开启，及其下属单位点击事件
+	$("#dropdown-menu").click(function(event){
+		$("#dropdown-menu-body").show();
+		event.stopPropagation();
 	});
 	$("#change-info").click(function(){
-		$dropDownMenuBody.hide();
 		$("#modal-info-change").show();
 	});
 	$("#login-out").click(function(){
@@ -120,5 +151,49 @@ $(function(){
 });
 
 /**
- * 
+ * 好友管理模块
  */
+
+$(function(){
+	// 点击添加按钮打开搜索模态框
+	$("#menu-nav-add").click(function(){
+		$("#modal-friend-add").show();
+	});
+	var $searchInput = $("#search-input");
+	// 搜索模态框导航点击事件
+	$(".friend-add-btn").click(function(event){
+		event.preventDefault();
+		$(".friend-add-btn").removeClass("friend-add-btn-check");
+		$(this).addClass('friend-add-btn-check');
+		$searchInput.data("type", $(this).attr("href"));
+	});
+	// 添加好友状态下点击#search-btn按钮
+	$("#search-btn").click(function(){
+		if(!$searchInput.val()){
+			alert("请输入查找对象名称");
+			return false;
+		}
+		if($searchInput.data("type") == "friend"){
+			$.ajax({
+				url: "/friend/searchFriend",
+				method: "get",
+				dataType: "json",
+				data: {
+					nickName: $searchInput.val()
+				},
+				success: function(data){
+					if(data.result == "fail"){
+						$("#search-result").html("").append('<p class="search-fail">' + data.message + '</p>');
+					}
+					else{
+						$("#search-result").data("name", data.name).html("").append('<img class="result-avatar" src="' + data.avatar + '"><p class="search-name">' + data.nickName + '</p><p class="search-name">' + (data.status == "up" ? "在线" : "离线") + '</p><a class="btn-search-add" href="javascript:;" title="添加"></a>');
+					}
+				},
+				error: function(err){
+					console.log(err);
+					alert("网络错误，请稍候重试")
+				}
+			});
+		}
+	});
+});

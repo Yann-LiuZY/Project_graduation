@@ -127,7 +127,6 @@ router.post("/changeUserInfo", function(req, res){
 		else{
 			fs.unlinkSync(files.avatar.path);
 		}
-		console.log(fields);
 		var changes = {};
 		if(!!fields.nickName)
 			changes.nickName = fields.nickName;

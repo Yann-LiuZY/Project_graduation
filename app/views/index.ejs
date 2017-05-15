@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 	<title>毕业项目页面样式</title>
 	<link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
@@ -105,7 +105,7 @@
 		</div>
 		<!-- main start -->
 	</div>
-	<!-- modal start -->
+	<!-- modal-info-change start -->
 	<div class="modal" id="modal-info-change">
 		<!-- 遮盖层背景 -->
 		<div class="modal-background"></div>
@@ -134,7 +134,28 @@
 			</form>
 		</div>
 	</div>
-	<!-- modal end -->
+	<!-- modal-info-change end -->
+	<!-- modal-add start -->
+	<div class="modal" id="modal-friend-add">
+		<!-- 遮盖层背景 -->
+		<div class="modal-background"></div>
+		<!-- 模态框本体 -->
+		<div class="modal-body friend-add">
+			<header class="friend-add-header clearfix">
+				<a class="friend-add-btn friend-add-btn-check" href="friend">添加好友</a>
+				<a class="friend-add-btn" href="group">添加群组</a>
+			</header>
+			<div class="friend-add-body">
+				<div class="search-container">
+					<input class="search-input" id="search-input" type="text" placeholder="输入名称" data-type="friend"/>
+					<a class="search-btn" id="search-btn" href="javascript:;" title="搜索"></a>
+				</div>
+				<div class="search-result clearfix" id="search-result">
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- modal-add end -->
 	<script src="javascript/jquery-3.2.1.min.js"></script>
 	<script src="javascript/index.js"></script>
 </body>

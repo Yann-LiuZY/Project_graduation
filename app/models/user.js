@@ -19,12 +19,13 @@ var userSchema = new mongoose.Schema({
 	},
 	avatar: {
 		type: String,
-		default: "/image/1.jpg"
+		default: "/image/user.png"
 	},
 	email: {
 		type: String,
 		default: ""
-	}
+	},
+	friends: [String]
 });
 
 var userModel = mongoose.model('user', userSchema, 'user');
