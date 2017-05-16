@@ -82,16 +82,16 @@ router.get("/checkName", function(req, res){
 });
 // 检验昵称是否存在
 router.get("/checkNickName", function(req, res){
-	mongoose.model("user").find({nickName: req.query.nickName}).exec(function(err, data){
+	mongoose.model("user").findOne({nickName: req.query.nickName}).exec(function(err, data){
 		if(err){
 			res.status(500).json({message: err.message});
 		}
 		else{
-			if(!data.length){
+			if(!data){
 				res.json({result: "success"});
 			}
 			else{
-				res.json({result: "fail"});
+				res.json({result: "fail", name: data.name});
 			}
 		}
 	});

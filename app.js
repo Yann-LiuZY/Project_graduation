@@ -11,6 +11,8 @@ var morgan = require("morgan");
 var index = require('./app/routes/index.js');
 var user = require('./app/routes/user.js');
 var friend = require('./app/routes/friend.js');
+var message = require('./app/routes/message.js');
+var group = require('./app/routes/group.js');
 
 var app = express();
 
@@ -40,6 +42,8 @@ app.use(session({
 app.use('/', index);
 app.use('/user', user);
 app.use('/friend', friend);
+app.use('/message', message);
+app.use('/group', group);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

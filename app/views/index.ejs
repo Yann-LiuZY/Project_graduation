@@ -20,6 +20,7 @@
 				<!-- 通过按钮点击打开的附件菜单 -->
 				<ul class="menu-header-dropdown-menu" id="dropdown-menu-body">
 					<li class="dropdown-menu-item" id="change-info">修改信息</li>
+					<li class="dropdown-menu-item" id="group-create">创建群组</li>
 					<li class="dropdown-menu-item" id="login-out">退出登录</li>
 				</ul>
 			</header>
@@ -79,22 +80,25 @@
 			<!-- main-message -->
 			<header class="message-title" id="chat-nickname">对方昵称</header>
 			<ul class="message-list" id="chat-message">
-				<li class="message-item clearfix message-self">
+				<!-- <li class="message-item clearfix message-self">
 					<img class="message-avatar" src="image/user.png">
 					<p class="message-text">gfadfdgg</p>
 				</li>
 				<li class="message-item clearfix">
 					<img class="message-avatar" src="image/user.png">
 					<p class="message-text">gfasdfsdfdsfdsfdsfsfdsfsdfdsdfgfasdfsdfdsfdsfdsfsfdsfsdfdsdfdggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggdgg</p>
-				</li>
+				</li> -->
 			</ul>
 			<div class="main-text">
 				<ul class="main-text-toolbar ul-default">
-					<li class="tool-bar-item"><a class="tool-bar-item-icon icon-file" href="javascript:;" title="发送文件"></a></li>
-					<li class="tool-bar-item"><a class="tool-bar-item-icon icon-voice" href="javascript:;" title="语音聊天"></a></li>
-					<li class="tool-bar-item"><a class="tool-bar-item-icon icon-video" href="javascript:;" title="视频聊天"></a></li>
+					<li class="tool-bar-item"><a class="tool-bar-item-icon icon-image" id="send-image" href="javascript:;" title="发送图片"></a></li>
+					<li class="tool-bar-item"><a class="tool-bar-item-icon icon-file" id="send-file" href="javascript:;" title="发送文件"></a></li>
+					<li class="tool-bar-item"><a class="tool-bar-item-icon icon-voice" id="send-voice" href="javascript:;" title="语音聊天"></a></li>
+					<li class="tool-bar-item"><a class="tool-bar-item-icon icon-video" id="video-chat" href="javascript:;" title="视频聊天"></a></li>
 				</ul>
 				<textarea class="main-text-area" id="chat-textarea" placeholder="按Enter发送"></textarea>
+				<input style="display: none;" type="file" id="send-image-input" accept="image/jpeg,image/jpg,image/png">
+				<input style="display: none;" type="file" id="send-file-input">
 			</div>
 		</div>
 		<!-- main start -->
@@ -110,11 +114,11 @@
 				<div class="info-change-item clearfix">
 					<label class="info-change-item-label">头像</label>
 					<img class="info-change-img" id="info-change-img" src="<%= avatar %>">
-					<input class="info-change-img-input" id="info-change-img-input" type="file" name="avatar"/>
+					<input class="info-change-img-input" id="info-change-img-input" type="file" name="avatar" accept="image/jpeg,image/jpg,image/png"/>
 				</div>
 				<div class="info-change-item clearfix">
 					<label class="info-change-item-label">昵称</label>
-					<input class="info-change-item-input" id="info-change-nickname" type="text" name="nickName" value="<%= nickName %>" required/>
+					<input class="info-change-item-input" id="info-change-nickname" type="text" name="nickName" value="<%= nickName %>" required data-result="true"/>
 				</div>
 				<div class="info-change-item clearfix">
 					<label class="info-change-item-label">密码</label>
@@ -150,6 +154,18 @@
 		</div>
 	</div>
 	<!-- modal-add end -->
+	<!-- group-create start -->
+	<div class="modal" id="modal-group-create">
+		<!-- 遮盖层背景 -->
+		<div class="modal-background"></div>
+		<!-- 模态框本体 -->
+		<div class="modal-body group-create">
+			<h2 class="group-create-title">创建群组</h2>
+			<input type="text" class="group-create-input" id="group-create-input" placeholder="请输入群组名称">
+			<a class="group-create-submit" id="group-create-submit">创建</a>
+		</div>
+	</div>
+	<!-- group-create end -->
 	<script src="javascript/jquery-3.2.1.min.js"></script>
 	<script src="javascript/socket.io.min.js"></script>
 	<script src="javascript/index.js"></script>

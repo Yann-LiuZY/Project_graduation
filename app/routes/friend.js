@@ -37,7 +37,11 @@ router.get("/getFriends", function(req, res){
 			console.log(err);
 		}
 		else{
-			if(!data.friends.length){
+			if(!data){
+				console.log(req.session);
+				res.status(500).send("服务器错误");
+			}
+			else if(!data.friends.length){
 				res.json([]);
 			}
 			else{
