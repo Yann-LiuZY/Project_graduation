@@ -427,15 +427,20 @@ function addNormalChat(target, targetType){
  * 添加聊天消息至列表中
  * @param  {[String]} avatar  头像url
  * @param  {[String]} message 消息信息
- * @param  {[String]} type    消息类型：0-对方，1-自己
+ * @param  {[bool]}   type    消息类型：0-对方，1-自己
+ * @param  {[bool]}   upload  消息类型：0-非上传文件，1-是上传文件
  */
-function addMessage(avatar, message, type){
+function addMessage(avatar, message, type, upload){
 	var html = '<li class="message-item clearfix"><img class="message-avatar" src="' + avatar +'"><p class="message-text">' + message + '</p></li>';
 	var div = $(html);
 	if(type){
 		div.addClass('message-self');
 	}
 	$("#chat-message").append(div).scrollTop(99999);
+	if(upload){
+		div.addClass('message-upload');
+		return div;
+	}
 }
 $(function(){
 	// 在输入框按回车发送消息
@@ -531,6 +536,52 @@ $(function(){
 				addMessage($("#user-avatar").attr("src"), data, 1);
 			}
 			reader.readAsDataURL(this.files[0]);
+		});
+	});
+
+	// 发送文件
+	$("#send-file").click(function(){
+		var $chatTextArea = $("#chat-textarea");
+		if(!$chatTextArea.data("name")){
+			alert("请选择聊天对象");
+			return false;
+		}
+		$("#send-file-input").click();
+		$("#send-file-input").on("change", function(){
+			var data = new FormData();
+			data.append("upFile", this.files[0]);
+			var div = addMessage($("#user-avatar").attr("src"), '【文件】<a class="file-name" href="javascript:;">' + data.get("upFile").name + '</a>', 1, 1);
+
+			$.ajax({
+				url: "/message/fileUpload",
+				method: "POST",
+				data: data,
+				dataType: "json",
+				processData: false,
+				contentType: false,
+				success: function(result){
+					div.removeClass('message-upload').find(".file-name").attr("href", "/downLoadFile?url=" + result.fileUrl);
+					var message = '【文件】<a class="file-name" href="' + "/downLoadFile?url=" + result.fileUrl + '">' + data.get("upFile").name + '</a>'
+					if($chatTextArea.data("type") == "private"){
+						socket.emit("privateMessage", {
+							name: userName,
+							nickName: $("#user-name").text(),
+							avatar: $("#user-avatar").attr("src")
+						}, {
+							name: $chatTextArea.data("name"),
+							nickName: $chatTextArea.data("nickName"),
+							avatar: $chatTextArea.data("avatar"),
+						}, message);
+					}
+					else if($chatTextArea.data("type") == "group"){
+						socket.emit("groupMessage", userName, $("#user-name").text(), $("#user-avatar").attr("src"), $chatTextArea.data("name"), message);
+					}
+				},
+				error: function(err){
+					console.log(err);
+				}
+			});
+				
 		});
 	});
 });

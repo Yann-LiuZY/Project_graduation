@@ -437,6 +437,57 @@ body{
 	border: 6px solid transparent;
 	border-right-color: #fafafa;
 }
+@-webkit-keyframes turns{
+	from{
+		-webkit-transform: rotate(0deg);
+		        transform: rotate(0deg);
+	}
+	to{
+		-webkit-transform: rotate(360deg);
+		        transform: rotate(360deg);
+	}
+}
+@keyframes turns{
+	from{
+		-webkit-transform: rotate(0deg);
+		        transform: rotate(0deg);
+	}
+	to{
+		-webkit-transform: rotate(360deg);
+		        transform: rotate(360deg);
+	}
+}
+.message-upload > .message-text:after{
+	font-size: 0;
+
+	position: absolute;
+	top: 50%;
+	left: -35px;
+
+	display: block;
+
+	width: 25px;
+	height: 25px;
+	margin-top: -12px;
+
+	content: "";
+	-webkit-animation: turns 1.5s linear 0s infinite;
+	        animation: turns 1.5s linear 0s infinite;
+
+	background-image: url(../image/loading.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 25px auto;
+}
+
+.file-name{
+	margin-left: 5px;
+
+	cursor: pointer;
+	text-decoration: underline;
+
+	color: #019fe8;
+}
 .message-self > .message-avatar{
 	float: right;
 }

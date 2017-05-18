@@ -29,5 +29,8 @@ router.get("/loginOut", function(req, res){
 	delete req.session.name;
 	res.redirect("/");
 });
+router.get("/downLoadFile", function(req, res){
+	res.download(req.query.url);
+});
 
 module.exports = router;

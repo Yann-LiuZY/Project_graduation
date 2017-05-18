@@ -125,7 +125,9 @@ io.on("connection", function(socket){
 			}, message);
 		}
 	});
-	
+	/**
+	 * 好友
+	 */
 
 
 

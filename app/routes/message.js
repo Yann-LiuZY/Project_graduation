@@ -1,6 +1,8 @@
 var express = require('express');
 var mongoose = require("mongoose");
 var router = express.Router();
+var fs = require("fs");
+var formidable = require("formidable");
 
 require("../models/message.js");
 
@@ -22,6 +24,24 @@ router.get("/getGroupMessageList", function(req, res){
 		else{
 			res.json(data);
 		}
+	});
+});
+
+// 文件上传，返回存储地址
+router.post("/fileUpload", function(req, res){
+	var form = new formidable.IncomingForm();
+	var fileUrl = "";
+	form.encoding = "utf-8";
+	form.uploadDir = "public/upload";
+	form.keepExtensions = true;
+	form.maxFieldsSize = 10 * 1024 * 1024;
+	form.parse(req, function(err, fields, files){
+		if(err){
+		  console.log(err);
+		  res.status(500).json(err);
+		}
+		fileUrl = files.upFile.path;
+		res.json({"fileUrl": fileUrl});
 	});
 });
 
