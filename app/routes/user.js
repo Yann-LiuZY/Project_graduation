@@ -130,8 +130,6 @@ router.post("/changeUserInfo", function(req, res){
 		var changes = {};
 		if(!!fields.nickName)
 			changes.nickName = fields.nickName;
-		if(!!fields.password)
-			changes.password = fields.password;
 		if(!!fields.email)
 			changes.email = fields.email;
 		if(!!avatarUrl)
@@ -146,6 +144,28 @@ router.post("/changeUserInfo", function(req, res){
 				res.json({result: "success"});
 			}
 		});
+	});
+});
+// 修改用户密码
+router.post("/changePassword", function(req, res){
+	mongoose.model("user").findOne({name: req.session.name}, function(err, data){
+		if(err){
+			console.log(err.message);
+			res.status(500).json({result: "fail", message: "服务器错误"});
+		}
+		console.log(req.body)
+		if(data.password === req.body.oldPassword){
+			mongoose.model("user").update({name: req.session.name}, {$set: {password: req.body.newPassword}}, function(err, data){
+				if(err){
+					console.log(err.message);
+					res.status(500).json({result: "fail", message: "服务器错误"});
+				}
+				res.json({result: "success"});
+			});
+		}
+		else{
+			res.json({result: "fail", message: "旧密码错误"});
+		}
 	});
 });
 

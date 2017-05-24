@@ -542,3 +542,36 @@ body{
 	background-color: #0182d2;
 }
 /* modal end */
+
+
+.message-audio{
+	font-size: 0;
+
+	cursor: pointer;
+}
+.message-control{
+	display: inline-block;
+
+	width: 30px;
+	height: 30px;
+	margin-left: 10px;
+
+	vertical-align: top;
+
+	background-image: url(../image/play1.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 15px;
+}
+.message-control-pause{
+	background-image: url(../image/pause1.png);
+}
+.message-time{
+	font-size: 14px;
+	line-height: 30px;
+
+	display: inline-block;
+
+	margin: 0 20px 0 15px;
+}
+

@@ -125,9 +125,6 @@ io.on("connection", function(socket){
 			}, message);
 		}
 	});
-	/**
-	 * 好友
-	 */
 
 
 
@@ -177,9 +174,19 @@ io.on("connection", function(socket){
 	 * @param  {[string]} room 		群组name
 	 */
 	socket.on("deleteGroup", function(from, room){
-		mongoose.model("group").update({name: room}, {$pull: {member: from}}, function(err){
+		mongoose.model("group").update({name: room}, {$pull: {member: from}}, function(err, data){
 			if(err)
 				console.log(err);
+			// if(data.member.length == 0){
+			// 	mongoose.model("group").remove({name: room}, function(err){
+			// 		if(err)
+			// 			console.log(err);
+			// 	});
+			// 	mongoose.model("message").remove({listenerName: room}, function(err){
+			// 		if(err)
+			// 			console.log(err);
+			// 	});
+			// }
 		});
 		socket.emit("announcement", "freshGroupList");
 		socket.leave(room);

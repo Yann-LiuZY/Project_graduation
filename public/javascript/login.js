@@ -51,12 +51,12 @@ $(function(){
         var passwordAgain = $("#register-password-again").val();
         if(!$("#register-name").data("result") && !!$("#register-name").val()){
             event.preventDefault();
-            $formTip.text("账号已存在");
+            $formTip.text("表单输入错误");
             return;
         }
         if(!$("#register-nickname").data("result") && !!$("#register-nickname").val()){
             event.preventDefault();
-            $formTip.text("昵称已存在");
+            $formTip.text("表单输入错误");
             return;
         }
         if(!!password && !!passwordAgain){
@@ -71,6 +71,9 @@ $(function(){
     $("#register-name").blur(function(){
         var $this = $(this);
         var name = $this.val();
+        if(!$this.parent().find(".form-error").length)
+            $this.parent().append('<div class="form-error"></div>');
+        $this.parent().find(".form-error").text("");
         $.ajax({
             method: "GET",
             url: "/user/checkName",
@@ -79,8 +82,10 @@ $(function(){
             success: function(data){
                 if(data.result == "success"){
                     $this.data("result", true);
+
                 }else{
                     $this.data("result", false);
+                    $this.parent().find(".form-error").text("该账号已存在");
                 }
             },
             error: function(data){
@@ -92,6 +97,9 @@ $(function(){
     $("#register-nickname").blur(function(){
         var $this = $(this);
         var nickName = $this.val();
+        if(!$this.parent().find(".form-error").length)
+            $this.parent().append('<div class="form-error"></div>');
+        $this.parent().find(".form-error").text("");
         $.ajax({
             method: "GET",
             url: "/user/checkNickName",
@@ -102,6 +110,7 @@ $(function(){
                     $this.data("result", true);
                 }else{
                     $this.data("result", false);
+                    $this.parent().find(".form-error").text("该昵称已存在");
                 }
             },
             error: function(data){

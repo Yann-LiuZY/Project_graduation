@@ -2,6 +2,7 @@ var express = require('express');
 var mongoose = require("mongoose");
 var router = express.Router();
 
+// 搜索好友
 router.get("/searchFriend", function(req, res){
 	mongoose.model("user").findOne({nickName: req.query.nickName}, function(err, data){
 		if(err){
@@ -31,6 +32,7 @@ router.get("/searchFriend", function(req, res){
 		}
 	});
 });
+// 获取好友信息
 router.get("/getFriends", function(req, res){
 	mongoose.model("user").findOne({name: req.session.name}, function(err, data){
 		if(err){

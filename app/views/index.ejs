@@ -20,6 +20,7 @@
 				<!-- 通过按钮点击打开的附件菜单 -->
 				<ul class="menu-header-dropdown-menu" id="dropdown-menu-body">
 					<li class="dropdown-menu-item" id="change-info">修改信息</li>
+					<li class="dropdown-menu-item" id="change-password">修改密码</li>
 					<li class="dropdown-menu-item" id="group-create">创建群组</li>
 					<li class="dropdown-menu-item" id="login-out">退出登录</li>
 				</ul>
@@ -75,6 +76,13 @@
 					<li class="tool-bar-item"><a class="tool-bar-item-icon icon-video" id="video-chat" href="javascript:;" title="视频聊天"></a></li>
 				</ul>
 				<textarea class="main-text-area" id="chat-textarea" placeholder="按Enter发送"></textarea>
+				<div class="voice-panel" id="voice-panel">
+					<h2 class="voice-title">正在录音中···</h2>
+					<div class="voice-btns">
+						<a class="btn-voice" id="btn-send-voice" href="javascript:;">发送</a>
+						<a class="btn-voice" id="btn-cancel-voice" href="javascript:;">取消</a>
+					</div>
+				</div>
 				<input style="display: none;" type="file" id="send-image-input" accept="image/jpeg,image/jpg,image/png">
 				<input style="display: none;" type="file" id="send-file-input">
 			</div>
@@ -99,10 +107,6 @@
 					<input class="info-change-item-input" id="info-change-nickname" type="text" name="nickName" value="<%= nickName %>" required data-result="true"/>
 				</div>
 				<div class="info-change-item clearfix">
-					<label class="info-change-item-label">密码</label>
-					<input class="info-change-item-input" id="info-change-password" type="text" name="password" value="<%= password %>" required/>
-				</div>
-				<div class="info-change-item clearfix">
 					<label class="info-change-item-label">邮箱</label>
 					<input class="info-change-item-input" id="info-change-email" type="text" name="email" value="<%= email %>"/>
 				</div>
@@ -111,6 +115,31 @@
 		</div>
 	</div>
 	<!-- modal-info-change end -->
+	<!-- modal-password-change start -->
+	<div class="modal" id="modal-password-change">
+		<!-- 遮盖层背景 -->
+		<div class="modal-background"></div>
+		<!-- 模态框本体 -->
+		<div class="modal-body info-change">
+			<h2 class="info-change-title">密码修改</h2>
+			<form class="info-change-form" id="password-change-form" method="post" action="/user/changePassword">
+				<div class="info-change-item clearfix">
+					<label class="info-change-item-label">旧的密码</label>
+					<input class="info-change-item-input" type="password" name="oldPassword" required />
+				</div>
+				<div class="info-change-item clearfix">
+					<label class="info-change-item-label">新的密码</label>
+					<input class="info-change-item-input" id="new-password" type="password" name="newPassword" required />
+				</div>
+				<div class="info-change-item clearfix">
+					<label class="info-change-item-label">再次输入</label>
+					<input class="info-change-item-input" id="new-password-again" type="password" name="newPasswordAgain" required />
+				</div>
+				<button class="info-change-submit" type="submit">提交修改</button>
+			</form>
+		</div>
+	</div>
+	<!-- modal-password-change end -->
 	<!-- modal-add start -->
 	<div class="modal" id="modal-friend-add">
 		<!-- 遮盖层背景 -->
@@ -146,6 +175,7 @@
 	<!-- group-create end -->
 	<script src="javascript/jquery-3.2.1.min.js"></script>
 	<script src="javascript/socket.io.min.js"></script>
+	<script src="javascript/recorder.js"></script>
 	<script src="javascript/index.js"></script>
 </body>
 </html>

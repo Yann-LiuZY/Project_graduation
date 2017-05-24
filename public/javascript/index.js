@@ -3,7 +3,7 @@
  */
 
 // socket.io配置
-var socket = io("http://192.168.1.105:3000");
+var socket = io("http://192.168.1.134:3000");
 // 当前用户账号
 var userName = $("#user-name").data("name");
 
@@ -175,6 +175,34 @@ $(function(){
 			}
 		});
 	});
+	// 修改密码
+	$("#password-change-form").submit(function(event){
+		event.preventDefault();
+		var data = $(this).serialize();
+		if($("#new-password").val() !== $("#new-password-again").val()){
+			alert("新密码两次输入不一致");
+			return false;
+		}
+		$.ajax({
+			url: "/user/changePassword",
+			method: "post",
+			data: data,
+			dataType: "json",
+			success: function(data){
+				if(data.result == "success"){
+					$("#modal-password-change").hide();
+					alert("修改密码成功");
+				}
+				else if(data.result == "fail"){
+					alert(data.message);
+				}
+					
+			},
+			error: function(err){
+				console.log(err);
+			}
+		});
+	});
 
 	// 隐藏菜单栏#dropdown-menu开启，及其下属单位点击事件
 	$("#dropdown-menu").click(function(event){
@@ -186,7 +214,11 @@ $(function(){
 	});
 	$("#login-out").click(function(){
 		location.href = "/loginOut";
-	})
+	});
+	$("#change-password").click(function(){
+		$("#modal-password-change").show();
+		$("#password-change-form").find("input").val("");
+	});
 });
 
 
@@ -441,6 +473,33 @@ function addMessage(avatar, message, type, upload){
 		div.addClass('message-upload');
 		return div;
 	}
+	if(message.indexOf('<i class="message-control"></i>') >= 0){
+		audioHandler(div);
+	}
+}
+/**
+ * 语音消息的处理函数
+ * @param  {[Object]} div 插入列表的消息节点的dom对象
+ */
+function audioHandler(div){
+	var item = div.find(".message-text").addClass('message-audio');
+	var audio = item.find(".message-audio")[0];
+	audio.addEventListener("canplay", function(){
+		item.find(".message-time").text(Math.ceil(this.duration) + "s");
+	});
+	audio.addEventListener("ended", function(){
+		item.find(".message-control").removeClass('message-control-pause');
+	});
+	item.on("click", function(){
+		if(audio.paused){
+			audio.play();
+			item.find(".message-control").addClass('message-control-pause');
+		}
+		else{
+			audio.pause();
+			item.find(".message-control").removeClass('message-control-pause');
+		}
+	});
 }
 $(function(){
 	// 在输入框按回车发送消息
@@ -584,6 +643,86 @@ $(function(){
 				
 		});
 	});
+
+
+	// 录音器
+	var recorder;
+	// API兼容处理
+	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+	// 获得语音
+	$("#send-voice").click(function(){
+		var $chatTextArea = $("#chat-textarea");
+		if(!$chatTextArea.data("name")){
+			alert("请选择聊天对象");
+			return false;
+		}
+		$("#voice-panel").show();
+		var timer = setTimeout(function(){
+			if(recorder && !recorder.end){
+				$("#btn-send-voice").click();
+			}
+		}, 60 * 1000);
+		if(navigator.getUserMedia){
+			navigator.getUserMedia({ audio: true }, function(stream){
+				recorder = new VoiceRecorder(stream);
+				recorder.start();
+			}, function(error){
+				alert("获取麦克风失败！");
+				console.log(error);
+				$("#voice-panel").hide();
+			});
+		}
+		else{
+			alert("当前设备不支持录音！");
+		}
+	});
+	// 发送语音
+	$("#btn-send-voice").click(function(){
+		if(recorder){
+			recorder.stop();
+			recorder.end = true;
+			var data = new FormData();
+			data.append("audioData", recorder.getBlob());
+			$chatTextArea = $("#chat-textarea");
+			$.ajax({
+				url: "/message/audioUpload",
+				method: "post",
+				data: data,
+				dataType: "json",
+				processData: false,
+				contentType: false,
+				success: function(data){
+					var message = '<i class="message-control"></i><span class="message-time"></span><audio class="message-audio" src="' + data.audioUrl + '"></audio>';
+					if($chatTextArea.data("type") == "private"){
+						socket.emit("privateMessage", {
+							name: userName,
+							nickName: $("#user-name").text(),
+							avatar: $("#user-avatar").attr("src")
+						}, {
+							name: $chatTextArea.data("name"),
+							nickName: $chatTextArea.data("nickName"),
+							avatar: $chatTextArea.data("avatar"),
+						}, message);
+					}
+					else if($chatTextArea.data("type") == "group"){
+						socket.emit("groupMessage", userName, $("#user-name").text(), $("#user-avatar").attr("src"), $chatTextArea.data("name"), message);
+					}
+					addMessage($("#user-avatar").attr("src"), message, 1);
+				},
+				error: function(err){
+					console.log(err);
+				}
+			});
+		}
+		recorder = null;
+		$("#voice-panel").hide();
+	});
+	// 取消语音发送
+	$("#btn-cancel-voice").click(function(){
+		recorder = null;
+		$("#voice-panel").hide();
+	});
+
 });
 
 

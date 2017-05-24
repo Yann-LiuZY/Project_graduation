@@ -93,6 +93,14 @@
 					<img class="message-avatar" src="image/1.jpg">
 					<p class="message-text">gfasdfsdfdsfdsfdsfsfdsfsdfdsdfgfasdfsdfdsfdsfdsfsfdsfsdfdsdfdggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggdgg</p>
 				</li>
+				<li class="message-item clearfix">
+					<img class="message-avatar" src="image/1.jpg">
+					<p class="message-text message-audio">
+						<i class="message-control"></i>
+						<span class="message-time">12s</span>
+						<audio class="message-audio" src="../public/voiceMessage/upload_9c90fbccc0264440e135acdaa26cb0c3.wav"></audio>
+					</p>
+				</li>
 			</ul>
 			<div class="main-text">
 				<ul class="main-text-toolbar ul-default">
@@ -142,6 +150,10 @@
 			$("#dropdown-menu").click(function(){
 				$("#dropdown-menu-body").toggle();
 			});
+
+			$(".message-audio").click(function(){
+				$(this).find("audio")[0].play();
+			})
 		});
 	</script>
 </body>
