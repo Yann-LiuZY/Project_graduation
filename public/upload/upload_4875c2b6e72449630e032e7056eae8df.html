@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>毕业项目页面样式</title>
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+</head>
+<body>
+	<div class="container clearfix">
+		<!-- menu start -->
+		<div class="menu">
+			<!-- user-info -->
+			<header class="menu-header clearfix">
+				<img class="user-avatar" src="image/user.png" >
+				<p class="user-name">Coffce</p>
+				<!-- 头部菜单按钮，可拉出菜单栏 -->
+				<a class="menu-header-menu" id="dropdown-menu" href="javascript:;"></a>
+				<!-- 通过按钮点击打开的附件菜单 -->
+				<ul class="menu-header-dropdown-menu" id="dropdown-menu-body">
+					<li class="dropdown-menu-item">修改信息</li>
+					<li class="dropdown-menu-item">退出登录</li>
+				</ul>
+			</header>
+			<!-- menu-nav -->
+			<ul class="menu-nav ul-default">
+				<li class="menu-nav-item menu-nav-item-check"><a href="javascript:;" class="menu-nav-item-icon menu-icon-message"></a></li>
+				<li class="menu-nav-item"><a href="javascript:;" class="menu-nav-item-icon menu-icon-friend"></a></li>
+				<li class="menu-nav-item"><a href="javascript:;" class="menu-nav-item-icon menu-icon-add"></a></li>
+			</ul>
+			<!-- menu-content -->
+			<div class="menu-content">
+				<!-- message list start -->
+				<ul class="menu-list" id="menu-message">
+					<li class="menu-item clearfix menu-message-check menu-message-new">
+						<img class="menu-item-avatar" src="image/1.jpg">
+						<p class="menu-item-name">Coffce</p>
+						<div class="new-message"></div>
+					</li>
+					<li class="menu-item clearfix">
+						<img class="menu-item-avatar" src="image/1.jpg">
+						<p class="menu-item-name">Coffce</p>
+						<div class="new-message"></div>
+					</li>
+				</ul>
+				<!-- message list end -->
+				<!-- friend list start -->
+				<div id="menu-friend">
+					<!-- 我的好友列表 -->
+					<div>
+						<p class="part-name">我的好友</p>
+						<ul class="menu-list" id="friend-list">
+							<li class="menu-item clearfix">
+								<img class="menu-item-avatar group" src="image/1.jpg">
+								<p class="menu-item-name">Coffce</p>
+							</li>
+							<li class="menu-item clearfix">
+								<img class="menu-item-avatar group" src="image/1.jpg">
+								<p class="menu-item-name">Coffce</p>
+							</li>
+						</ul>
+					</div>
+					<!-- 群组列表 -->
+					<div>
+						<p class="part-name">我的群组</p>
+						<ul class="menu-list" id="group-list">
+							<li class="menu-item clearfix">
+								<i class="group-avatar"></i>
+								<p class="menu-item-name">Coffce</p>
+							</li>
+							<li class="menu-item clearfix">
+								<i class="group-avatar"></i>
+								<p class="menu-item-name">Coffce</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- friend list end -->
+			</div>
+		</div>
+		<!-- menu end -->
+		<!-- main start -->
+		<div class="main">
+			<!-- main-message -->
+			<header class="message-title">对方名称</header>
+			<ul class="message-list">
+				<li class="message-item clearfix message-self">
+					<img class="message-avatar" src="image/1.jpg">
+					<p class="message-text">gfadfdgg</p>
+				</li>
+				<li class="message-item clearfix">
+					<img class="message-avatar" src="image/1.jpg">
+					<p class="message-text">gfasdfsdfdsfdsfdsfsfdsfsdfdsdfgfasdfsdfdsfdsfdsfsfdsfsdfdsdfdggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggfasdfsdfdsfdsfdsfsfdsfsdfdsdfdgggdgg</p>
+				</li>
+				<li class="message-item clearfix">
+					<img class="message-avatar" src="image/1.jpg">
+					<p class="message-text message-audio">
+						<i class="message-control"></i>
+						<span class="message-time">12s</span>
+						<audio class="message-audio" src="../public/voiceMessage/upload_9c90fbccc0264440e135acdaa26cb0c3.wav"></audio>
+					</p>
+				</li>
+			</ul>
+			<div class="main-text">
+				<ul class="main-text-toolbar ul-default">
+					<li class="tool-bar-item"><a class="tool-bar-item-icon icon-file" href="javascript:;" title="发送文件"></a></li>
+					<li class="tool-bar-item"><a class="tool-bar-item-icon icon-voice" href="javascript:;" title="语音聊天"></a></li>
+					<li class="tool-bar-item"><a class="tool-bar-item-icon icon-video" href="javascript:;" title="视频聊天"></a></li>
+				</ul>
+				<textarea class="main-text-area" placeholder="按Enter发送"></textarea>
+			</div>
+		</div>
+		<!-- main start -->
+	</div>
+	<!-- modal start -->
+	<div class="modal">
+		<!-- 遮盖层背景 -->
+		<div class="modal-background"></div>
+		<!-- 模态框本体 -->
+		<div class="modal-body info-change">
+			<h2 class="info-change-title">个人信息修改</h2>
+			<form class="info-change-form" method="post" action="">
+				<div class="info-change-item clearfix">
+					<label class="info-change-item-label">头像</label>
+					<img class="info-change-img" src="image/1.jpg">
+					<input class="info-change-img-input" type="text" name=""/>
+				</div>
+				<div class="info-change-item clearfix">
+					<label class="info-change-item-label">昵称</label>
+					<input class="info-change-item-input" type="text" name="nickName"/>
+				</div>
+				<div class="info-change-item clearfix">
+					<label class="info-change-item-label">密码</label>
+					<input class="info-change-item-input" type="text" name="password"/>
+				</div>
+				<div class="info-change-item clearfix">
+					<label class="info-change-item-label">邮箱</label>
+					<input class="info-change-item-input" type="text" name="email"/>
+				</div>
+				<button class="info-change-submit" type="submit">提交修改</button>
+			</form>
+		</div>
+	</div>
+	<!-- modal end -->
+	<script src="javascript/jquery-3.2.1.min.js"></script>
+	<script src="javascript/index.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$("#dropdown-menu").click(function(){
+				$("#dropdown-menu-body").toggle();
+			});
+
+			$(".message-audio").click(function(){
+				$(this).find("audio")[0].play();
+			})
+		});
+	</script>
+</body>
+</html>

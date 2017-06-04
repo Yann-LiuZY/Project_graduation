@@ -191,6 +191,29 @@ io.on("connection", function(socket){
 		socket.emit("announcement", "freshGroupList");
 		socket.leave(room);
 	});
+
+
+
+	/**
+	 * 视频聊天消息传递
+	 * @param  {[String]} from      [发送者账号]
+	 * @param  {[String]} to        [接受者账号]
+	 * @param  {[String]} message   [消息内容]
+	 */
+	socket.on("videochat", function(from, to, message){
+		if(JSON.parse(message).type = "videoInvite"){
+			if(!userArr[to]){
+				socket.emit("videochat", JSON.stringify({
+					type: "videoInviteResult",
+					data: "fail",
+					info: "该用户不在线"
+				}));
+			}
+		}
+		if(userArr[to]){
+			io.sockets.sockets[userArr[to]].emit("videochat", from, message);
+		}
+	});
 });
 
 module.exports.listen = function(server){

@@ -365,6 +365,8 @@ body{
 
 /* main start */
 .main{
+	position: relative;
+
 	float: left;
 
 	width: 600px;
@@ -642,6 +644,66 @@ body{
 .btn-voice:hover{
 	color: #fff;
 	background-color: #d6d6d6;
+}
+.video-panel{
+	position: absolute;
+	top: 50px;
+	right: 0;
+	left: 0;
+
+	display: none;
+
+	width: 100%;
+	height: 390px;
+
+	background-color: #fff;
+}
+.video-theirs{
+	width: 100%;
+	height: 100%;
+
+	background-color: #fff;
+}
+.video-yours{
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	z-index: 2;
+
+	width: 200px;
+	height: 151px;
+
+	border-top: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	background-color: #ccc;
+}
+.video-tools{
+	position: absolute;
+	z-index: 1;
+	bottom: 0;
+	left: 0;
+
+	width: 100%;
+	height: 40px;
+
+	background-color: rgba(0, 0, 0, .2);
+}
+.btn-video{
+	font-size: 14px;
+	line-height: 30px;
+
+	display: inline-block;
+
+	height: 30px;
+	margin: 5px 10px;
+	padding: 0 10px;
+
+	color: #fff;
+	border-radius: 4px;
+	background-color: #ff7575;
+}
+.btn-video:hover{
+	background-color: #e66a6a;
 }
 /* main end */
 

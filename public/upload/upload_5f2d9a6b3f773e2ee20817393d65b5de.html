@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>带信第三版试做—登录</title>
+	<link rel="stylesheet" href="css/login.css">
+	<script src="javascript/jquery-3.2.1.min.js"></script>
+	<script src="javascript/login.js"></script>
+</head>
+<body>
+	<div class="container">
+		<!-- login-body start -->
+		<div class="layout">
+			<!-- login-main start -->
+			<div class="login-main">
+				<nav class="login-nav">
+					<a class="nav-menu menu-select" href="#login-form">登录</a>
+					<a class="nav-menu" href="#register-form">注册</a>
+				</nav>
+				<div class="nav-cont">
+					<form class="nav-cont-item login-form" id="login-form" method="post" action="/login">
+						<!-- login-list start -->
+						<div class="input-list">
+							<div class="input-line">
+								<input type="text" placeholder="用户名" data-type="form-tel" required/>
+							</div>
+							<div class="input-line">
+								<input type="password" placeholder="密码" required/>
+							</div>
+						</div>
+						<button class="btn input-btn" id="login-submit">登录</button>
+						<!-- login-list end -->
+					</form>
+					<form class="nav-cont-item register-form" id="register-form" method="post" action="/register">
+						<!-- register-list start -->
+						<div class="input-list">
+							<div class="input-line input-line-top">
+								<input type="text" id="register-name" placeholder="用户名" required/>
+							</div>
+							<div class="input-line">
+								<input type="password" id="register-password" placeholder="密码" required/>
+							</div>
+							<div class="input-line">
+								<input type="password" id="register-password-again" placeholder="再次输入密码" required/>
+							</div>
+						</div>
+						<button class="btn input-btn" id="register-submit">注册</button>
+						<!-- register-list end -->
+					</form>
+				</div>
+				<!-- form-tip -->
+				<div class="form-tip" id="form-tip"></div>
+			</div>
+			<!-- login-main end -->
+		</div>
+		<!-- login-body end -->
+	</div>
+</body>
+</html>

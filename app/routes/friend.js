@@ -40,7 +40,6 @@ router.get("/getFriends", function(req, res){
 		}
 		else{
 			if(!data){
-				console.log(req.session);
 				res.status(500).send("服务器错误");
 			}
 			else if(!data.friends.length){

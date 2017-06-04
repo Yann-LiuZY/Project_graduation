@@ -3,9 +3,11 @@
  */
 
 // socket.io配置
-var socket = io("http://192.168.1.134:3000");
+var socket = io.connect("https://192.168.1.134:3000");
 // 当前用户账号
 var userName = $("#user-name").data("name");
+// getUserMedia兼容处理
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
 
 /**
  * 页面初始化
@@ -145,10 +147,6 @@ $(function(){
 		event.preventDefault();
 		if(!$("#info-change-nickname").val()){
 			alert("请输入昵称");
-			return false;
-		}
-		if(!$("#info-change-password").val()){
-			alert("请输入密码");
 			return false;
 		}
 		if(!$("#info-change-nickname").data("result")){
@@ -647,8 +645,7 @@ $(function(){
 
 	// 录音器
 	var recorder;
-	// API兼容处理
-	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
 	// 获得语音
 	$("#send-voice").click(function(){
 		var $chatTextArea = $("#chat-textarea");
@@ -874,6 +871,146 @@ $(function(){
 				normalChatList["group" + tergetName].remove();
 				delete normalChatList["group" + tergetName];
 			}
+		}
+	});
+});
+
+
+/**
+ * 视频聊天部分处理                                                                                                                                                        [description]
+ */
+// RTCPeerConnection兼容性处理
+window.RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection || window.msRTCPeerConnection;
+
+/**
+ * 创建一个peerConnection
+ * @return {[Object]}        [创建出的peerConnection对象]
+ */
+function createPeerConnection(callback){
+	// stun协议服务器使用
+	var config = {
+        'iceServers': [{ 'url': 'stun:stun.services.mozilla.com' }, { 'url': 'stun:stunserver.org' }, { 'url': 'stun:stun.l.google.com:19302' }]
+    };
+    var peerConnection = new RTCPeerConnection(config);
+    // candidate传递至远方浏览器
+    peerConnection.onicecandidate = function(event){
+    	socket.emit("videochat", userName, $("#chat-textarea").data("name"), JSON.stringify({type: "iceCandidate", data: event.candidate}))
+    }
+    // 将传递过来的视频流插入video标签中
+    peerConnection.onaddstream = function(event){
+    	$("#video-theirs")[0].src = URL.createObjectURL(event.stream);
+    	console.log(peerConnection)
+    }
+    // 获取视频流
+    navigator.getUserMedia({
+		video: true,
+		audio: true
+	}, function(stream){
+		// 将视频流插入本地video标签中
+		$("#video-yours")[0].src = window.URL.createObjectURL(stream);
+		peerConnection.addStream(stream);
+		if(callback)
+			callback();
+	}, function(error){
+		console.log("getUserMedia error: " + error);
+		$("#video-panel").hide();
+	});
+
+    return peerConnection;
+}
+
+$(function(){
+	var peerConnection;
+
+	// 点击视频聊天按钮
+	$("#video-chat").click(function(){
+		var targetname = $("#chat-textarea").data("name");
+		if(!targetname){
+			alert("请选择聊天对象！");
+			return false;
+		}
+		if($("#chat-textarea").data("type") == "group"){
+			alert("不可在群组中使用视频聊天！");
+			return false;
+		}
+		socket.emit("videochat", userName, targetname, JSON.stringify({type: "videoInvite", data: $("#user-name").text()}));
+	});
+	// 关闭视频聊天
+	$("#btn-close-video").click(function(){
+		$("#video-panel").hide();
+		peerConnection.close();
+		$("#video-yours")[0].src = "";
+		$("#video-theirs")[0].src = "";
+		socket.emit("videochat", userName, $("#chat-textarea").data("name"), JSON.stringify({type: "videoClose"}));
+	});
+	socket.on("videochat", function(from, message){
+		var targetname = $("#chat-textarea").data("name");
+		if(!message){
+			return false;
+		}
+		message = JSON.parse(message);
+		// 视频聊天邀请
+		if(message.type == "videoInvite"){
+			var result = confirm("是否与" + message.data + "进行视频聊天？");
+			if(result){
+				if(targetname != from){
+					$("#friend-list").find(".menu-item").each(function(index, item){
+						if($(item).data("name") == from)
+							$(item).click();
+					});
+				}
+				targetname = $("#chat-textarea").data("name");
+				socket.emit("videochat", userName, targetname, JSON.stringify({type: "videoInviteResult", data: "success"}));
+				$("#video-panel").show();
+				peerConnection = createPeerConnection();
+			}
+			else{
+				socket.emit("videochat", userName, targetname, JSON.stringify({type: "videoInviteResult", data: "fail", info: "对方拒绝了视频聊天"}));
+			}
+		}
+		// 视频聊天邀请结果
+		else if(message.type == "videoInviteResult"){
+			if(message.data == "success"){
+				peerConnection = createPeerConnection(function(){
+					$("#video-panel").show();
+					// 发送sdp offer
+					peerConnection.createOffer(function(desc){
+						peerConnection.setLocalDescription(desc);
+						socket.emit("videochat", userName, targetname, JSON.stringify({type: "videoOffer", data: desc}));
+					}, function(error){
+						console.log("createOffer error: " + error)
+					});
+				});
+			}
+			else if(message.data == "fail"){
+				alert(message.info);
+			}
+		}
+		// 接收到sdp offer
+		else if(message.type == "videoOffer"){
+			peerConnection.setRemoteDescription(new RTCSessionDescription(message.data));
+			// 发送sdp answer
+			peerConnection.createAnswer(function(desc){
+				peerConnection.setLocalDescription(desc);
+				socket.emit("videochat", userName, targetname, JSON.stringify({type: "videoAnswer", data: desc}));
+			}, function(error){
+				console.log("createAnswer error: " + error);
+			});
+		}
+		// 接受到sdp answer
+		else if(message.type == "videoAnswer"){
+			peerConnection.setRemoteDescription(new RTCSessionDescription(message.data));
+		}
+		// 接受到candidate
+		else if(message.type == "iceCandidate"){
+			if(message.data)
+				peerConnection.addIceCandidate(new RTCIceCandidate(message.data));
+		}
+		// 关闭视频聊天
+		else if(message.type == "videoClose"){
+			$("#video-panel").hide();
+			$("#video-yours")[0].src = "";
+			$("#video-theirs")[0].src = "";
 		}
 	});
 });
